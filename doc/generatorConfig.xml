@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- 代码构建属性文件放于resource下 -->
+    <properties resource="mysql.properties"/>
+
+    <context id="park" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+<!--    自定义生成实体类类注解以及类方法插件,如需修改则改动makeAnnotations方法即可    -->
+        <plugin type="com.reuben.generator.plugins.ModelAnnotationsPlugin">
+            <property name="author" value="${author}"/>
+        </plugin>
+        <commentGenerator type="com.reuben.generator.plugins.FawkesXaCommentGenerator">
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <property name="author" value="${author}"/>
+        </commentGenerator>
+        <!--数据库链接URL，用户名、密码 -->
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${db.url}"
+                        userId="${db.username}" password="${db.password}">
+        </jdbcConnection>
+
+
+        <!-- 指定时间类型为LocalDate-->
+        <javaTypeResolver>
+            <!--
+            默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer; true，把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal
+            -->
+            <property name="forceBigDecimals" value="false"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+        <!-- 生成模型的包名和位置 -->
+        <javaModelGenerator targetPackage="${target.model.package}"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="rootClass" value="实体类是否有基础类"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- 生成映射文件的包名和位置 -->
+        <sqlMapGenerator targetPackage="${target.xml.package}"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!-- 生成DAO的包名和位置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="${target.mapper.package}"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <table tableName="test" domainObjectName="Test"
+               enableCountByExample="true" enableUpdateByExample="true"
+               enableDeleteByExample="true" enableSelectByExample="true"
+               enableSelectByPrimaryKey="true">
+            <columnOverride column="create_date" javaType="java.sql.Timestamp"/>
+            <columnOverride column="update_date" javaType="java.sql.Timestamp"/>
+        </table>
+    </context>
+</generatorConfiguration>
